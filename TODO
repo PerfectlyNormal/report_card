@@ -15,3 +15,7 @@
   * Notifications
 * Error handling for notifications
   Might be partially fixed by processing in the background, if we have a queue with retries
+* Pack it up as a gem?
+* Update the Rakefile
+  * Make it possible to build a single project from the command-line
+  * Make it possible to build all projects
