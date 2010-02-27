@@ -24,10 +24,10 @@ module ReportCard
       dir  = ReportCard.config['integrity_path'] + '/' + repo
 
       if File.exist?(dir)
-        STDERR.puts ">> Building metrics for #{project.name}"
+        ReportCard.log "Building metrics for #{project.name}"
         Dir.chdir dir
       else
-        STDERR.puts ">> Skipping, directory does not exist: #{dir}"
+        ReportCard.log "Skipping, directory does not exist: #{dir}"
       end
     end
 
@@ -64,7 +64,7 @@ module ReportCard
 
         @success = true
       rescue Exception => e
-        STDERR.puts "Problem generating the reports: #{e}"
+        ReportCard.log "Problem generating the reports: #{e}", :level => :error
         @success = false
       end
     end
@@ -96,7 +96,7 @@ module ReportCard
 
     def notify
       return if @config['skip_notification']
-      STDERR.puts ">> Scores differ, notifying Campfire"
+      ReportCard.log "Scores differ, notifying Campfire"
 
       begin
         config = @project.notifiers.first.config
@@ -111,7 +111,7 @@ module ReportCard
         room.paste self.scoreboard
         room.leave
       rescue Exception => e
-        STDERR.puts ">> Problem connecting to Campfire: #{e}"
+        ReportCard.log "Problem connecting to Campfire: #{e}", :level => :warn
       end
     end
 
