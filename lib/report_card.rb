@@ -1,5 +1,6 @@
 $:.unshift(File.dirname(__FILE__))
 
+require 'report_card/core_ext/kernel'
 require 'report_card/helpers'
 require 'report_card/app'
 require 'report_card/index'
@@ -9,8 +10,8 @@ module ReportCard
   CONFIG_FILE = File.expand_path(File.join(File.dirname(__FILE__), "..", "config.yml"))
 
   def self.grade
-    Integrity.new(config['integrity_config'])
     self.setup
+    require config['integrity_path'] + '/init.rb'
 
     ignore = config['ignore'] ? Regexp.new(config['ignore']) : /[^\w\d\s\S]+/
     projects = []
