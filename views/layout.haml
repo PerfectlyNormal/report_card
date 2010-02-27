@@ -12,4 +12,11 @@
         graded by
         %a(href='http://github.com/PerfectlyNormal/report_card') report_card
     #content= yield
-    #footer= @footer
+    #footer
+      - if authorized?
+        Oh, hello
+        %strong&= current_user
+      - else
+        Hey there!
+        %a{ :href => path("/login") } Log In
+        if you have a user
