@@ -1,6 +1,8 @@
 require 'report_card/core_ext/kernel'
 require 'report_card/helpers'
 require 'report_card/app'
+require 'report_card/notifier'
+require 'report_card/notifiers'
 require 'report_card/grader'
 
 module ReportCard

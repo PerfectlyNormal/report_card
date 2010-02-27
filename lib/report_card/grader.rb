@@ -16,7 +16,7 @@ module ReportCard
 
     def wrapup
       score
-      notify if score_changed?
+      notify
     end
 
     def ready?
@@ -96,38 +96,16 @@ module ReportCard
 
     def notify
       return if @config['skip_notification']
-      ReportCard.log "Scores differ, notifying Campfire"
 
-      begin
-        config = @project.notifiers.first.config
-        room ||= begin
-          options = {}
-          options[:ssl] = true
-          campfire = Tinder::Campfire.new(config["account"], options)
-          campfire.login(config["user"], config["pass"])
-          campfire.find_room_by_name(config["room"])
-        end
-        room.speak self.message
-        room.paste self.scoreboard
-        room.leave
-      rescue Exception => e
-        ReportCard.log "Problem connecting to Campfire: #{e}", :level => :warn
+      graded = Notifiers::GradedNotifier.new(@project, @config)
+      graded.deliver!
+
+      if score_changed?
+        score = Notifiers::ScoreChangedNotifier.new(@project, @config, scores, old_scores)
+        score.deliver!
       end
-    end
 
-    def message
-      path = @project.public ? "" : "private"
-      "New metrics generated for #{@project.name}: #{File.join(@config['url'], path, @project.name, 'output')}"
-    end
-
-    def scoreboard
-      scores = ""
-      columns = "%15s%20s%20s\n"
-      scores << sprintf(columns, "", "This Run", "Last Run")
-      scores << sprintf(columns, "Flay Score", @scores[:flay], @old_scores[:flay])
-      scores << sprintf(columns, "Flog Total/Avg", "#{@scores[:flog_total]}/#{@scores[:flog_average]}", "#{@old_scores[:flog_total]}/#{@old_scores[:flog_average]}")
-      scores << sprintf(columns, "Reek Smells", @scores[:reek], @old_scores[:reek])
-      scores << sprintf(columns, "Roodi Problems", @scores[:roodi], @old_scores[:roodi])
+      true
     end
 
     def score_changed?
