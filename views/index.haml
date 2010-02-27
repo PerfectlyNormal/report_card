@@ -14,7 +14,7 @@
         %a(href='http://github.com/PerfectlyNormal/report_card') report_card
     #content
       %ul#projects
-      - @projects.each do |project|
-        %li.success
-          %a(href='#{project.name}/output/')= project.name
+        - @projects.each do |project|
+          %li.success
+            %a(href='#{project.name}/output/')= project.name
     #footer= @footer
