@@ -9,7 +9,6 @@ module ReportCard
   CONFIG_FILE = File.expand_path(File.join(File.dirname(__FILE__), "..", "config.yml"))
 
   def self.grade
-    self.setup
     require config['integrity_path'] + '/init.rb'
 
     ignore = config['ignore'] ? Regexp.new(config['ignore']) : /[^\w\d\s\S]+/
@@ -28,10 +27,5 @@ module ReportCard
     else
       Kernel.abort("You need a config file at #{CONFIG_FILE}. Check the readme please!")
     end
-  end
-
-  def self.setup
-    FileUtils.mkdir_p(config['site'])
-    FileUtils.cp(Dir[File.join(File.dirname(__FILE__), '..', 'template', '*.{css,ico}')], config['site'])
   end
 end
