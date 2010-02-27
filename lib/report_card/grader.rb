@@ -4,7 +4,7 @@ module ReportCard
 
     def initialize(project, config)
       @project = project
-      @config = config
+      @config  = config
     end
 
     def grade
@@ -20,7 +20,9 @@ module ReportCard
     end
 
     def ready?
-      dir = Integrity::ProjectBuilder.new(project).send(:export_directory)
+      repo = Integrity::Repository.new(project.builds.last.id, project.uri, project.branch, project.builds.last.commit.identifier).directory
+      dir  = ReportCard.config['integrity_path'] + '/' + repo
+
       if File.exist?(dir)
         STDERR.puts ">> Building metrics for #{project.name}"
         Dir.chdir dir
@@ -52,7 +54,7 @@ module ReportCard
     def generate
       begin
         MetricFu.metrics.each { |metric| MetricFu.report.add(metric) }
-        MetricFu.graphs.each  { |graph| MetricFu.graph.add(graph) }
+        MetricFu.graphs.each  { |graph| MetricFu.graph.add(graph, :bluff) }
 
         MetricFu.report.save_output(MetricFu.report.to_yaml, MetricFu.base_directory, 'report.yml')
         MetricFu.report.save_output(MetricFu.report.to_yaml, MetricFu.data_directory, "#{Time.now.strftime("%Y%m%d")}.yml")
@@ -136,8 +138,13 @@ module ReportCard
       @success
     end
 
+    def data_path(*dirs)
+      data_dir = @config['data_dir'] || File.join(File.dirname(__FILE__), "..", "..", "data")
+      File.expand_path(File.join(data_dir, *dirs))
+    end
+
     def site_path(*dirs)
-      site_dir = @config['site'] || File.join(File.dirname(__FILE__), "..", "..")
+      site_dir = @config['site'] || File.join(File.dirname(__FILE__), "..", "..", "public")
       File.expand_path(File.join(site_dir, *dirs))
     end
 
@@ -148,11 +155,11 @@ module ReportCard
     end
 
     def scores_path
-      site_path("scores", @project.name)
+      data_path("scores", @project.name)
     end
 
     def archive_path
-      site_path("archive", @project.name)
+      data_path("archive", @project.name)
     end
   end
 end

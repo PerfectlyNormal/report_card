@@ -1,0 +1,15 @@
+!!! 5
+%html
+  %head
+    %meta(content='text/html; charset=utf-8' http-equiv='Content-Type')
+    %meta(content='en' http-equiv='Content-Language')
+    %title= "#{@title} | metrics"
+    - stylesheets "reset", "buttons", "integrity"
+  %body>
+    #header
+      %h1 metrics
+      %address.watermark
+        graded by
+        %a(href='http://github.com/PerfectlyNormal/report_card') report_card
+    #content= yield
+    #footer= @footer
