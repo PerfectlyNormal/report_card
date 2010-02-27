@@ -138,8 +138,13 @@ module ReportCard
       @success
     end
 
+    def data_path(*dirs)
+      data_dir = @config['data_dir'] || File.join(File.dirname(__FILE__), "..", "..", "data")
+      File.expand_path(File.join(data_dir, *dirs))
+    end
+
     def site_path(*dirs)
-      site_dir = @config['site'] || File.join(File.dirname(__FILE__), "..", "..")
+      site_dir = @config['site'] || File.join(File.dirname(__FILE__), "..", "..", "public")
       File.expand_path(File.join(site_dir, *dirs))
     end
 
@@ -150,11 +155,11 @@ module ReportCard
     end
 
     def scores_path
-      site_path("scores", @project.name)
+      data_path("scores", @project.name)
     end
 
     def archive_path
-      site_path("archive", @project.name)
+      data_path("archive", @project.name)
     end
   end
 end
