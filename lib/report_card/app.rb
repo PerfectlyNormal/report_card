@@ -43,5 +43,18 @@ module ReportCard
       status 404
       show :not_found, :title => "project not found"
     end
+
+    post '/:project/grade' do
+      login_required
+      project = Integrity::Project.first(:name => params[:project])
+
+      unless project
+        status 404
+        return show :not_found, :title => "project not found"
+      end
+
+      @grader = Grader.new(project, ReportCard.config)
+      @grader.grade
+    end
   end
 end
