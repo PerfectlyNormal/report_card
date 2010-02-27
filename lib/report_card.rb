@@ -18,3 +18,5 @@ module ReportCard
     end
   end
 end
+
+ReportCard.setup
