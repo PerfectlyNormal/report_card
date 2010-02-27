@@ -4,7 +4,7 @@ module ReportCard
 
     def initialize(project, config)
       @project = project
-      @config = config
+      @config  = config
     end
 
     def grade
