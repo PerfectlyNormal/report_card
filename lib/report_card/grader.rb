@@ -20,7 +20,9 @@ module ReportCard
     end
 
     def ready?
-      dir = Integrity::ProjectBuilder.new(project).send(:export_directory)
+      repo = Integrity::Repository.new(project.builds.last.id, project.uri, project.branch, project.builds.last.commit.identifier).directory
+      dir  = ReportCard.config['integrity_path'] + '/' + repo
+
       if File.exist?(dir)
         STDERR.puts ">> Building metrics for #{project.name}"
         Dir.chdir dir
