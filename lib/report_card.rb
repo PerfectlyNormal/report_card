@@ -1,10 +1,7 @@
 $:.unshift(File.dirname(__FILE__))
 
-require 'integrity'
-require 'metric_fu'
-require 'tinder'
-require 'erb'
-
+require 'report_card/helpers'
+require 'report_card/app'
 require 'report_card/index'
 require 'report_card/grader'
 
