@@ -1,5 +1,3 @@
-$:.unshift(File.dirname(__FILE__))
-
 require 'report_card/core_ext/kernel'
 require 'report_card/helpers'
 require 'report_card/app'
