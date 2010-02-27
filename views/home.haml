@@ -1,0 +1,20 @@
+!!! html5
+%html
+  %head
+    %meta(content='text/html; charset=utf-8' http-equiv='Content-Type')
+    %meta(content='en' http-equiv='Content-Language')
+    %title metrics
+    - stylesheets "reset", "buttons", "integrity"
+    %link(rel="shortcut icon" href="/favicon.ico")
+  %body>
+    #header
+      %h1 metrics
+      %address.watermark
+        graded by
+        %a(href='http://github.com/PerfectlyNormal/report_card') report_card
+    #content
+      %ul#projects
+      - @projects.each do |project|
+        %li.success
+          %a(href='#{project.name}/output')= project.name
+    #footer= @footer
