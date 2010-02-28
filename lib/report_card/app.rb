@@ -28,20 +28,27 @@ module ReportCard
       redirect root_url.to_s
     end
 
-    get '/:project/output/?' do
-      # Check directory (eww)
-      # and index?
-      if File.directory?(File.join(File.expand_path("../../../public/#{params[:project]}/output", __FILE__)))
-        return redirect "/#{params[:project]}/output/", 301
+    get "/:project/?" do
+      project = Integrity::Project.first(:name => params[:project])
+
+      if project.nil?
+        status 404
+        return show :not_found, :title => "project not found"
       end
 
-      # Check project
-      if Integrity::Project.first(:name => params[:project])
-        return show :not_graded, :title => "not graded"
+      # Check output directory
+      priv = project.public ? "" : "private"
+      dir  = File.join(options.public, priv, project.name, "output")
+
+      if File.directory?(dir)
+        if File.file?(File.join(dir, "index.html"))
+          return redirect project_output_path(project), 301
+        else
+          return show :grading, :title => "grading in process"
+        end
       end
 
-      status 404
-      show :not_found, :title => "project not found"
+      show :not_graded, :title => "not graded"
     end
 
     post '/:project/grade' do

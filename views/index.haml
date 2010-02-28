@@ -1,4 +1,4 @@
 %ul#projects
   - @projects.each do |project|
     %li.success
-      %a(href='#{project.name}/output/')= project.name
+      %a(href="#{project_output_path(project)}")= project.name
