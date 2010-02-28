@@ -3,11 +3,7 @@
 * The header for reports is wrong ("metrics | 6")
   Because it's build 6, but should be the name of the project
 * URL generation (Work fine without a subdomain)
-  * GradedNotifier generates URLs in a weird way
   * views use hardcoded URLs
-* Improve the check if a project exists
-  * First test is ugly
-    * Should also check if index.html exists, and if not, display a message that it's currently building
 * Better (any) documentation
 * Update (rewrite) the tests
 * Process events in the background
