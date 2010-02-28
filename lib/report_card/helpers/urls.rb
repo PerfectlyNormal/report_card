@@ -9,6 +9,19 @@ module ReportCard
         @root_path ||= Addressable::URI.parse(url_for("/", :path_only))
       end
 
+      def project_url(project)
+        Addressable::URI.parse(url_for(project.name, :full))
+      end
+
+      def project_path(project)
+        Addressable::URI.parse(url_for(project.name, :path_only))
+      end
+
+      def project_output_path(project)
+        priv = project.public ? "" : "private/"
+        Addressable::URI.parse(url_for("#{priv}#{project.name}/output/index.html"))
+      end
+
       def url(*path)
         root_url.join(path.join("/"))
       end
