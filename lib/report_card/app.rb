@@ -51,7 +51,7 @@ module ReportCard
       show :not_graded, :title => "not graded"
     end
 
-    post '/:project/grade' do
+    post "/:project/grade" do
       login_required
       project = Integrity::Project.first(:name => params[:project])
 
