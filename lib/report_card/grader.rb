@@ -12,6 +12,7 @@ module ReportCard
       configure
       generate
       wrapup if success?
+      Dir.chdir @old_dir
     end
 
     def wrapup
@@ -25,6 +26,7 @@ module ReportCard
 
       if File.exist?(dir)
         ReportCard.log "Building metrics for #{project.name}"
+        @old_dir = Dir.getwd
         Dir.chdir dir
       else
         ReportCard.log "Skipping, directory does not exist: #{dir}"
