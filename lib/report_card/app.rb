@@ -29,13 +29,18 @@ module ReportCard
     end
 
     get '/:project/output/?' do
-      # Check directory (eww)
-      # and index?
-      if File.directory?(File.join(File.expand_path("../../../public/#{params[:project]}/output", __FILE__)))
-        return redirect "/#{params[:project]}/output/", 301
+      # Check output directory
+      dir = File.join(options.public, params[:project], "/output")
+
+      if File.directory?(dir)
+        if File.file?(File.join(dir, "index.html"))
+          return redirect "/#{params[:project]}/output/", 301
+        else
+          return show :grading, :title => "grading in process"
+        end
       end
 
-      # Check project
+      # Check existence of project
       if Integrity::Project.first(:name => params[:project])
         return show :not_graded, :title => "not graded"
       end
